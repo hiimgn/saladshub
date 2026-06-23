@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Nước Ép Trái Cây Nguyên Chất 100% - Salads Hub" />
+        <meta name="author" content="Salads Hub" />
+        <title>Nước Ép & Sinh Tố - Salads Hub</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+
+        <style>
+            body {
+                background-color: #FAF6F0; 
+                color: #333333; 
+                font-family: system-ui, -apple-system, sans-serif;
+                padding-bottom: 95px; 
+            }
+            .text-brand-orange { color: #F27020 !important; }
+            .navbar-custom { background-color: #ffffff !important; border-bottom: 1px solid #eae5dd; }
+            
+            .btn-brand-orange {
+                background-color: #F27020 !important;
+                color: #ffffff !important;
+                border: none;
+                transition: all 0.2s;
+            }
+            .btn-brand-orange:hover { background-color: #e05f11 !important; }
+
+            .option-box {
+                background-color: #ffffff !important;
+                border: 1px solid #ebd9c5 !important;
+                border-radius: 12px;
+            }
+            .btn-cart-custom { border-color: #FAF6F0; background-color: #FAF6F0; color: #333333; }
+            
+            #product-image { transition: opacity 0.2s ease-in-out; }
+            #product-desc { transition: opacity 0.2s ease-in-out; }
+
+            textarea::placeholder {
+                font-style: italic;
+            }
+
+            .fruit-grid-item {
+                background-color: #fcfbf9;
+                border: 1px solid #ebd9c5;
+                border-radius: 8px;
+                padding: 8px 12px;
+                transition: all 0.2s;
+                cursor: pointer;
+            }
+            .fruit-grid-item:hover {
+                border-color: #F27020;
+                background-color: #fffaf5;
+            }
+
+            .custom-toast {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translate(-50%, -40px);
+                background-color: #ffffff;
+                border-left: 4px solid #F27020; 
+                color: #333333;
+                padding: 10px 18px;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+                z-index: 9999;
+                opacity: 0;
+                white-space: nowrap;
+                font-weight: 600;
+                font-size: 0.9rem;
+                transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                pointer-events: none;
+            }
+            .custom-toast.show {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        </style>
+    </head>
+    <body>
+        <div id="brand-toast" class="custom-toast"></div>
+
+        <nav class="navbar navbar-custom sticky-top shadow-sm py-2">
+            <div class="container px-4 px-lg-5 d-flex justify-content-between align-items-center">
+                <div class="navbar-brand d-flex align-items-center fw-bold mb-0">
+                    <a href="#" onclick="window.history.back(); return false;" class="text-dark me-2 d-flex align-items-center" style="text-decoration: none;">
+                        <i class="bi bi-arrow-left" style="font-size: 1.3rem; -webkit-text-stroke: 0.5px;"></i>
+                    </a>
+                    <a href="index.html" class="text-brand-orange" style="text-decoration: none;">Salads Hub</a>
+                </div>
+                
+                <form class="d-flex">
+                    <button class="btn btn-cart-custom fw-bold d-flex align-items-center py-1 px-2 px-sm-3 rounded-pill border" type="button" onclick="window.location.href='cart.html'">
+                        <i class="bi-cart-fill me-1 me-sm-2 text-brand-orange"></i>
+                        <span class="d-none d-sm-inline me-1">Giỏ hàng</span>
+                        <span id="cart-count" class="badge bg-dark text-white rounded-pill">0</span>
+                    </button>
+                </form>
+            </div>
+        </nav>
+
+        <section class="py-4">
+            <div class="container px-4 px-lg-5 my-2">
+                <div class="row gx-4">
+                    
+                    <div class="col-md-6 mb-4">
+                        <img id="product-image" class="card-img-top rounded shadow-sm w-100" 
+                             src="https://placehold.co/600x400/eeeeee/888888?text=Anh+Nuoc+Ep+Trai+Cay" 
+                             alt="Nước Ép Trái Cây" style="max-height: 400px; object-fit: cover;" />
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="small text-uppercase fw-bold mb-1 text-brand-orange">Thanh mát tự nhiên, nạp đầy sức sống</div>
+                        <h1 class="fw-bolder fs-2 mb-2 text-dark">Nước Ép Nguyên Chất</h1>
+                        
+                        <div class="fs-4 mb-3">
+                            <span id="product-price-top" class="text-brand-orange fw-bold fs-2">59.000đ</span>
+                        </div>
+                        
+                        <p id="product-desc" class="mb-4 text-muted" style="font-size: 0.95rem; text-align: justify; line-height: 1.6;">
+                            Nước ép thế hệ mới kết hợp giữa Táo ngọt lịm, cải Kale siêu thực phẩm và Ổi giàu Vitamin C. Ép chậm nguyên chất 100%, không pha thêm một giọt nước hay đường.
+                        </p>
+                        
+                        <div class="p-3 option-box mb-3 shadow-sm">
+                            <label for="juice-select" class="form-label fw-bold text-dark mb-2">1. Chọn vị nước ép yêu thích:</label>
+                            <select id="juice-select" class="form-select border-secondary">
+                                <option value="59000" data-img="https://placehold.co/600x400/eeeeee/888888?text=Anh+Tao+Kale+Oi" data-desc="Nước ép thế hệ mới kết hợp giữa Táo ngọt lịm, cải Kale siêu thực phẩm và Ổi giàu Vitamin C. Ép chậm nguyên chất 100%, không pha thêm một giọt nước hay đường.">Táo Kale Ổi - 59.000đ ⭐</option>
+                                <option value="59000" data-img="https://placehold.co/600x400/eeeeee/888888?text=Anh+Tao+Can+Dua" data-desc="Thanh lọc, đốt mỡ hiệu quả với Táo giòn, Cần tây hữu cơ thanh mát và Dứa mật ngọt lịm. Thơm thơm dễ uống vô cùng.">Táo Cần Dứa - 59.000đ ⭐</option>
+                                <option value="59000" data-img="https://placehold.co/600x400/eeeeee/888888?text=Anh+Cam+Ca+Rot+Xa" data-desc="Sự kết hợp bùng nổ đề kháng từ Cam mọng nước, Cà rốt ngọt thanh và hương thơm thoang thoảng ấm áp từ nhánh Sả tươi.">Cam Cà Rốt Sả - 59.000đ ⭐</option>
+                                
+                                <option value="65000" data-img="https://placehold.co/600x400/eeeeee/888888?text=Anh+Tao+Can+Kale+Chanh" data-desc="Siêu phẩm detox đại tài. Táo thơm, Cần tây ép kiệt, cải Kale organic hòa quyện cùng chút cốt Chanh tươi mát lạnh.">Táo Cần Kale Chanh - 65.000đ</option>
+                                <option value="65000" data-img="https://placehold.co/600x400/eeeeee/888888?text=Anh+Tao+Can+Dua+Leo+Chanh" data-desc="Cấp nước tức thì cho làn da và cơ thể với Táo dẻo, Cần tây nhiều xơ, Dưa leo mọng nước và Chanh xanh thanh lọc.">Táo Cần Dưa Leo Chanh - 65.000đ</option>
+                                
+                                <option value="59000" data-img="https://placehold.co/600x400/eeeeee/888888?text=Anh+Tao+Kale+Cam" data-desc="Vị chua ngọt hài hòa giữa Táo Tây ngọt lịm, cải xoăn Kale giàu sắt và những tép Cam sành mọng nước ngọt ngào.">Táo Kale Cam - 59.000đ</option>
+                                <option value="59000" data-img="https://placehold.co/600x400/eeeeee/888888?text=Anh+Tao+Den+Cai+Tim" data-desc="Bổ máu, đẹp da tuyệt đối với sắc đỏ từ Củ dền dồi dào khoáng chất, Táo giòn ngọt và Cải tím giàu chất chống oxy hóa.">Táo Dền Cải Tím - 59.000đ</option>
+                                <option value="59000" data-img="https://placehold.co/600x400/eeeeee/888888?text=Anh+Tao+Den+Ot+Chuong" data-desc="Thử thách vị giác mới lạ cực kỳ healthy: Sự kết hợp độc đáo giữa Táo, Củ dền và Ớt chuông Đà Lạt ngọt thanh không hề nồng hăng.">Táo Dền Ớt Chuông - 59.000đ</option>                                                            
+                                <option value="custom" data-img="https://placehold.co/600x400/eeeeee/888888?text=Tu+Mix+Vi+Theo+Y+Thich" data-desc="Tự do sáng tạo ly nước ép theo gu riêng của bạn! Chọn bên dưới từ 1 đến tối đa 4 loại quả. Hệ thống tự động tính giá bậc thang.">Tự Chọn Vị (Tối đa 4 loại quả)</option>
+                            </select>
+                        </div>
+
+                        <div id="custom-mix-box" class="p-3 option-box mb-3 shadow-sm d-none border-warning">
+                            <label class="form-label fw-bold text-dark mb-1">Tích chọn món bạn muốn mix (Chọn từ 1 - 4 loại):</label>
+                            <div class="small text-brand-orange fw-bold mb-3">(1 loại: 50k | 2 loại: 55k | 3 loại: 59k | 4 loại: 65k)</div>
+                            
+                            <div class="row row-cols-2 row-cols-sm-3 g-2">
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Táo"> Táo</label></div>
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Cam"> Cam</label></div>
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Kale"> Kale</label></div>
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Ổi"> Ổi</label></div>
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Dứa"> Dứa</label></div>
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Cần tây"> Cần tây</label></div>
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Dưa leo"> Dưa leo</label></div>
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Củ dền"> Củ dền</label></div>
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Cải tím"> Cải tím</label></div>
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Ớt chuông"> Ớt chuông</label></div>
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Cà rốt"> Cà rốt</label></div>
+                                <div class="col"><label class="d-flex align-items-center fruit-grid-item small fw-semibold"><input type="checkbox" class="form-check-input fruit-checkbox me-2" value="Sả"> Sả</label></div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 option-box mb-3 shadow-sm">
+                            <label class="form-label fw-bold text-dark mb-2">2. Tùy chọn đá viên:</label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="ice-radio" id="ice1" value="Bình thường" checked>
+                                <label class="form-check-label" for="ice1">Bình thường</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="ice-radio" id="ice2" value="Ít đá">
+                                <label class="form-check-label" for="ice2">Ít đá</label>
+                            </div>
+                            <div class="form-check mb-1">
+                                <input class="form-check-input" type="radio" name="ice-radio" id="ice3" value="Không đá">
+                                <label class="form-check-label" for="ice3">Không đá</label>
+                            </div>
+                        </div>
+
+                        <div class="p-3 option-box mb-4 shadow-sm">
+                            <label for="order-notes" class="form-label fw-bold text-dark mb-2">3. Ghi chú cho quán:</label>
+                            <textarea class="form-control" id="order-notes" rows="2" placeholder="Ví dụ: Lọc bớt bọt giúp mình, ép nhiều cần tây một chút..."></textarea>
+                        </div>
+
+                        <div class="p-3 option-box mb-4 shadow-sm">
+                            <label class="form-label fw-bold text-dark mb-2">4. Chọn số lượng ly:</label>
+                            <div class="input-group border border-secondary rounded bg-white" style="max-width: 120px; height: 38px;">
+                                <button class="btn btn-link text-dark p-0 px-2" type="button" id="btn-decrease" style="text-decoration:none;"><i class="bi bi-dash-lg"></i></button>
+                                <input type="text" class="form-control text-center border-0 fw-bold bg-transparent p-0" id="quantity-input" value="1" readonly style="font-size: 1rem;">
+                                <button class="btn btn-link text-dark p-0 px-2" type="button" id="btn-increase" style="text-decoration:none;"><i class="bi bi-plus-lg"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <div class="fixed-bottom bg-transparent px-3 pb-3" style="z-index: 1030;">
+            <div class="container p-0 px-lg-5">
+                <button class="btn btn-brand-orange w-100 py-3 fw-bold shadow-lg d-flex justify-content-between align-items-center px-4" type="button" id="add-to-cart-btn" style="border-radius: 14px; font-size: 1.05rem;">
+                    <span><i class="bi-cart-fill me-2"></i>Thêm vào giỏ hàng</span>
+                    <span id="product-price" class="fw-bolder fs-4">59.000đ</span>
+                </button>
+            </div>
+        </div>
+
+        <footer class="py-5 bg-dark text-white-50">
+            <div class="container px-4 px-lg-5">
+                <div class="row g-4 text-start">
+                    <div class="col-md-6">
+                        <h5 class="text-white fw-bold mb-3 text-brand-orange">Salads Hub</h5>
+                        <p class="small mb-2 d-flex align-items-start">
+                            <i class="bi bi-geo-alt-fill me-2 text-brand-orange mt-1"></i>
+                            <span><strong>Địa chỉ:</strong> 95G Lý Nam Đế, Hoàn Kiếm, Hà Nội</span>
+                        </p>
+                        <p class="small mb-2">
+                            <i class="bi bi-telephone-fill me-2 text-brand-orange"></i>
+                            <strong>Hotline:</strong> +84 8 2929 2727
+                        </p>
+                        <p class="small mb-0">
+                            <i class="bi bi-clock-fill me-2 text-brand-orange"></i>
+                            <strong>Giờ phục vụ:</strong> 09:00 - 18:00 (Hàng ngày)
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-white fw-bold mb-3">Về Chúng Tôi</h5>
+                        <p class="small lh-base mb-0" style="text-align: justify;">
+                            Sức khỏe luôn là lựa chọn đúng đắn và giá trị nhất trong cuộc sống. Salads Hub mang đến lối sống lành mạnh, tích cực thông qua các món ăn khoa học, nguồn nguyên liệu organic xanh sạch, giúp bạn tận hưởng cuộc sống trọn vẹn và tràn đầy năng lượng.
+                        </p>
+                    </div>
+                </div>
+                <hr class="border-secondary my-4" />
+                <div class="text-center small text-muted">
+                    <p class="m-0">Copyright &copy; Salads Hub 2019. Powered by HACTECH Network Admin Student.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const juiceSelect = document.getElementById("juice-select");
+                const customMixBox = document.getElementById("custom-mix-box");
+                const fruitCheckboxes = document.querySelectorAll(".fruit-checkbox");
+                
+                const priceDisplay = document.getElementById("product-price");
+                const priceDisplayTop = document.getElementById("product-price-top"); 
+                const productImage = document.getElementById("product-image");
+                const productDesc = document.getElementById("product-desc");
+                const quantityInput = document.getElementById("quantity-input");
+                const btnDecrease = document.getElementById("btn-decrease");
+                const btnIncrease = document.getElementById("btn-increase");
+                const addToCartBtn = document.getElementById("add-to-cart-btn");
+                const cartCount = document.getElementById("cart-count");
+
+                function formatCurrency(amount) {
+                    return parseInt(amount).toLocaleString('vi-VN') + 'đ';
+                }
+
+                function calculateJuiceBasePrice() {
+                    if (juiceSelect.value !== "custom") {
+                        return parseInt(juiceSelect.value);
+                    }
+                    
+                    let checkedCount = document.querySelectorAll(".fruit-checkbox:checked").length;
+                    if (checkedCount === 1) return 50000;
+                    if (checkedCount === 2) return 55000;
+                    if (checkedCount === 3) return 59000;
+                    if (checkedCount === 4) return 65000;
+                    return 0;
+                }
+
+                function updateTotalPrice() {
+                    let basePrice = calculateJuiceBasePrice();
+                    let mainQuantity = parseInt(quantityInput.value) || 1;
+                    let finalTotal = basePrice * mainQuantity;
+                    
+                    let formattedPrice = formatCurrency(finalTotal);
+                    priceDisplay.textContent = basePrice === 0 && juiceSelect.value === "custom" ? "Chọn vị mix" : formattedPrice;
+                    if (priceDisplayTop) {
+                        priceDisplayTop.textContent = basePrice === 0 && juiceSelect.value === "custom" ? "0đ (Chọn vị mix ẩn dưới)" : formattedPrice;
+                    }
+                }
+
+                function updateCartBadge() {
+                    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                    let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                    if (cartCount) cartCount.textContent = totalItems;
+                }
+
+                fruitCheckboxes.forEach(cb => {
+                    cb.addEventListener("change", function () {
+                        let checkedCount = document.querySelectorAll(".fruit-checkbox:checked").length;
+                        if (checkedCount > 4) {
+                            this.checked = false;
+                            const toast = document.getElementById("brand-toast");
+                            if (toast) {
+                                toast.textContent = "Chỉ được chọn tối đa 4 món thôi nhé ><";
+                                toast.classList.add("show");
+                                setTimeout(() => { toast.classList.remove("show"); }, 2500);
+                            }
+                        }
+                        updateTotalPrice();
+                    });
+                });
+
+                juiceSelect.addEventListener("change", function () {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const targetImg = selectedOption.getAttribute("data-img");
+                    const targetDesc = selectedOption.getAttribute("data-desc");
+
+                    if (this.value === "custom") {
+                        customMixBox.classList.remove("d-none");
+                    } else {
+                        customMixBox.classList.add("d-none");
+                        fruitCheckboxes.forEach(cb => cb.checked = false);
+                    }
+
+                    productImage.style.opacity = 0.3;
+                    productDesc.style.opacity = 0.3; 
+                    
+                    setTimeout(() => {
+                        productImage.src = targetImg;
+                        productDesc.textContent = targetDesc; 
+                        productImage.style.opacity = 1;
+                        productDesc.style.opacity = 1; 
+                    }, 200);
+
+                    updateTotalPrice();
+                });
+
+                btnDecrease.addEventListener("click", function () {
+                    let qty = parseInt(quantityInput.value);
+                    if (qty > 1) {
+                        quantityInput.value = qty - 1;
+                        updateTotalPrice();
+                    }
+                });
+
+                btnIncrease.addEventListener("click", function () {
+                    let qty = parseInt(quantityInput.value);
+                    quantityInput.value = qty + 1;
+                    updateTotalPrice();
+                });
+
+                try {
+                    let editIndex = localStorage.getItem("edit_target_index");
+                    if (editIndex !== null && editIndex !== undefined && editIndex !== "null") {
+                        editIndex = parseInt(editIndex);
+                        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                        let editItem = cart[editIndex];
+                        
+                        if (editItem && editItem.category === "juice") {
+                            let spanElement = addToCartBtn.querySelector('span');
+                            if (spanElement) {
+                                spanElement.innerHTML = '<i class="bi bi-save-fill me-2"></i>Cập nhật ly nước';
+                            }
+
+                            document.querySelectorAll('input[name="ice-radio"]').forEach(radio => {
+                                if(radio.value === editItem.sauce) radio.checked = true;
+                            });
+
+                            if (editItem.protein.startsWith("Tự chọn mix:")) {
+                                juiceSelect.value = "custom";
+                                customMixBox.classList.remove("d-none");
+                                let cleanFruitsStr = editItem.protein.replace("Tự chọn mix: ", "");
+                                let activeFruits = cleanFruitsStr.split(", ");
+                                fruitCheckboxes.forEach(cb => {
+                                    if (activeFruits.includes(cb.value)) cb.checked = true;
+                                });
+                            } else {
+                                for(let i = 0; i < juiceSelect.options.length; i++) {
+                                    if(juiceSelect.options[i].text.startsWith(editItem.protein)) {
+                                        juiceSelect.selectedIndex = i;
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            productImage.src = juiceSelect.options[juiceSelect.selectedIndex].getAttribute("data-img");
+                            productDesc.textContent = juiceSelect.options[juiceSelect.selectedIndex].getAttribute("data-desc");
+                            document.getElementById("order-notes").value = editItem.notes || "";
+                            quantityInput.value = editItem.quantity || 1;
+                        }
+                    }
+                } catch (error) {
+                    console.error("Lỗi phục hồi edit nước ép:", error);
+                }
+
+                if (addToCartBtn) {
+                    addToCartBtn.addEventListener("click", function () {
+                        try {
+                            let checkedCount = document.querySelectorAll(".fruit-checkbox:checked").length;
+
+                            if (juiceSelect.value === "custom" && checkedCount === 0) {
+                                const toast = document.getElementById("brand-toast");
+                                if (toast) {
+                                    toast.textContent = "Vui lòng tích chọn ít nhất 1 loại quả để mix nhé!";
+                                    toast.classList.add("show");
+                                    setTimeout(() => { toast.classList.remove("show"); }, 2500);
+                                }
+                                return;
+                            }
+
+                            const selectedOption = juiceSelect.options[juiceSelect.selectedIndex];
+                            const checkedIceRadio = document.querySelector('input[name="ice-radio"]:checked');
+                            const selectedIce = checkedIceRadio ? checkedIceRadio.value : "Đá bình thường";
+                            
+                            let currentPrice = calculateJuiceBasePrice();
+                            let finalJuiceName = "";
+
+                            if (juiceSelect.value === "custom") {
+                                let selectedFruits = [];
+                                document.querySelectorAll(".fruit-checkbox:checked").forEach(cb => {
+                                    selectedFruits.push(cb.value);
+                                });
+                                finalJuiceName = "Tự chọn mix: " + selectedFruits.join(", ");
+                            } else {
+                                finalJuiceName = selectedOption.text.split(" - ")[0];
+                            }
+
+                            let currentEditIndex = localStorage.getItem("edit_target_index");
+                            let isEditing = (currentEditIndex !== null && currentEditIndex !== undefined && currentEditIndex !== "null");
+                            
+                            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                            let itemId = "item_" + Date.now();
+                            
+                            if (isEditing) {
+                                let idx = parseInt(currentEditIndex);
+                                if (cart[idx] && cart[idx].id) itemId = cart[idx].id;
+                            }
+
+                            const cartItem = {
+                                id: itemId, 
+                                category: "juice",
+                                name: "Nước Ép Nguyên Chất",
+                                protein: finalJuiceName,
+                                sauce: selectedIce,
+                                toppings: [],
+                                notes: document.getElementById("order-notes") ? document.getElementById("order-notes").value.trim() : "",
+                                quantity: parseInt(quantityInput.value) || 1,
+                                comboUnitPrice: currentPrice
+                            };
+
+                            if (isEditing) {
+                                cart[parseInt(currentEditIndex)] = cartItem;
+                                localStorage.setItem("cart", JSON.stringify(cart));
+                                localStorage.removeItem("edit_target_index"); 
+                                window.location.href = "cart.html";
+                            } else {
+                                cart.push(cartItem);
+                                localStorage.setItem("cart", JSON.stringify(cart));
+                                
+                                const toast = document.getElementById("brand-toast");
+                                if (toast) {
+                                    toast.textContent = "Đã thêm ly nước thanh mát vào giỏ!";
+                                    toast.classList.add("show");
+                                    setTimeout(() => { toast.classList.remove("show"); }, 2000);
+                                }
+
+                                quantityInput.value = 1;
+                                document.getElementById("order-notes").value = "";
+                                document.getElementById("ice1").checked = true;
+                                juiceSelect.selectedIndex = 0;
+                                customMixBox.classList.add("d-none");
+                                fruitCheckboxes.forEach(cb => cb.checked = false);
+                            }
+                            updateCartBadge();
+                            updateTotalPrice();
+                        } catch (err) {
+                            console.error("Lỗi nút lưu giỏ hàng juice:", err);
+                        }
+                    });
+                }
+
+                updateCartBadge();
+                updateTotalPrice();
+            });
+        </script>
+    </body>
+</html>

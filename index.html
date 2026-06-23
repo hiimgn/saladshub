@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Healthy salads and drinks" />
+        <meta name="author" content="Salads Hub" />
+        <title>Salads Hub | Healthy Salads & Drinks</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+
+        <style>
+            body {
+                background-color: #FAF6F0;
+                color: #333333;
+                font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+            
+            /* Màu cam thương hiệu */
+            .text-brand-orange {
+                color: #F27020 !important;
+            }
+
+            /* Định dạng Navbar */
+            .navbar-custom {
+                background-color: #ffffff !important;
+                border-bottom: 1px solid #eae5dd;
+            }
+
+            .header-custom {
+                position: relative;
+                background-image: url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=80');
+                background-size: cover;
+                background-position: center;
+                overflow: hidden;
+            }
+
+            .header-custom::before {
+                content: "";
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(44, 37, 32, 0.75);
+                backdrop-filter: blur(4px);
+                z-index: 1;
+            }
+
+            .header-custom .container {
+                position: relative;
+                z-index: 2; 
+            }
+
+            .card-custom {
+                background-color: #ffffff !important;
+                border: 1px solid #ebd9c5 !important;
+                border-radius: 12px;
+                box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.04);
+                transition: transform 0.2s ease-in-out;
+            }
+            .card-custom:hover {
+                transform: translateY(-3px);
+            }
+
+            .btn-brand-orange {
+                background-color: #F27020 !important;
+                color: #ffffff !important;
+                border: none;
+                transition: all 0.2s ease-in-out;
+            }
+            .btn-brand-orange:hover {
+                background-color: #e05f11 !important;
+                color: #ffffff !important;
+            }
+
+            .btn-cart-custom {
+                border-color: #FAF6F0;
+                background-color: #FAF6F0;
+                color: #333333;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-custom sticky-top shadow-sm py-2">
+            <div class="container px-4 px-lg-5 d-flex justify-content-between align-items-center">
+                
+                <a class="navbar-brand fw-bold text-brand-orange mb-0" href="index.html">Salads Hub</a>
+                
+                <form class="d-flex">
+                    <button class="btn btn-cart-custom fw-bold d-flex align-items-center py-1 px-2 px-sm-3 rounded-pill border" type="button" id="cart-btn-index" onclick="window.location.href='cart.html'">
+                        <i class="bi-cart-fill me-1 me-sm-2 text-brand-orange"></i>
+                        <span class="d-none d-sm-inline me-1">Giỏ hàng</span>
+                        <span id="cart-count" class="badge bg-dark text-white rounded-pill">0</span>
+                    </button>
+                </form>
+
+            </div>
+        </nav>
+        
+        <header class="header-custom py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder lh-sm">
+                        Healthy<br>Salads & Drinks
+                    </h1>
+                    <p class="lead fw-bold text-brand-orange mt-3 mb-0">Hôm nay bạn muốn ăn gì?</p>
+                </div>
+            </div>
+        </header>
+        
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-3">
+                <div class="row justify-content-center">
+                    
+                    <div class="col-12 mb-4">
+                        <div class="card-custom h-100 p-2">
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <h5 class="fw-bolder fs-4">Salads</h5>
+                                    <div class="text-muted fw-bold mt-1">Từ <span class="text-brand-orange fs-5">79.000đ</span></div>
+                                </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="d-grid"><a class="btn btn-brand-orange py-2 fw-bold" href="salad.html">Xem chi tiết</a></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mb-4">
+                        <div class="card-custom h-100 p-2">
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <h5 class="fw-bolder fs-4">Cơm Gạo Lứt Kèm Đạm</h5>
+                                    <div class="text-muted fw-bold mt-1">Từ <span class="text-brand-orange fs-5">89.000đ</span></div>
+                                </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="d-grid"><a class="btn btn-brand-orange py-2 fw-bold" href="brown-rice.html">Xem chi tiết</a></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mb-4">
+                        <div class="card-custom h-100 p-2">
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <h5 class="fw-bolder fs-4">Cơm Gạo Lứt Trộn</h5>
+                                    <div class="text-muted fw-bold mt-1">Từ <span class="text-brand-orange fs-5">99.000đ</span></div>
+                                </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="d-grid"><a class="btn btn-brand-orange py-2 fw-bold" href="mixed-rice.html">Xem chi tiết</a></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mb-4">
+                        <div class="card-custom h-100 p-2">
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <h5 class="fw-bolder fs-4">Các Loại Nước Ép</h5>
+                                    <div class="text-muted fw-bold mt-1">Từ <span class="text-brand-orange fs-5">49.000đ</span></div>
+                                </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="d-grid"><a class="btn btn-brand-orange py-2 fw-bold" href="juice.html">Xem chi tiết</a></div>
+                            </div>
+                        </div>
+                    </div>                    
+                    
+                </div>
+            </div>
+        </section>
+        
+        <footer class="py-5 bg-dark text-white-50">
+            <div class="container px-4 px-lg-5">
+                <div class="row g-4 text-start">
+                    
+                    <div class="col-md-6">
+                        <h5 class="text-white fw-bold mb-3 text-brand-orange">Salads Hub</h5>
+                        <p class="small mb-2 d-flex align-items-start">
+                            <i class="bi bi-geo-alt-fill me-2 text-brand-orange mt-1"></i>
+                            <span><strong>Địa chỉ:</strong> 95G Lý Nam Đế, Hoàn Kiếm, Hà Nội</span>
+                        </p>
+                        <p class="small mb-2">
+                            <i class="bi bi-telephone-fill me-2 text-brand-orange"></i>
+                            <strong>Hotline:</strong> +84 8 2929 2727
+                        </p>
+                        <p class="small mb-0">
+                            <i class="bi bi-clock-fill me-2 text-brand-orange"></i>
+                            <strong>Giờ phục vụ:</strong> 09:00 - 18:00 (Hàng ngày)
+                        </p>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5 class="text-white fw-bold mb-3">Về Chúng Tôi</h5>
+                        <p class="small lh-base mb-0" style="text-align: justify;">
+                            Sức khỏe luôn là lựa chọn đúng đắn và giá trị nhất trong cuộc sống. Salads Hub mang đến lối sống lành mạnh, tích cực thông qua các món ăn khoa học, nguồn nguyên liệu organic xanh sạch, giúp bạn Amazon cuộc sống trọn vẹn và tràn đầy năng lượng.
+                        </p>
+                    </div>
+
+                </div>
+                
+                <hr class="border-secondary my-4" />
+                <div class="text-center small text-muted">
+                    <p class="m-0">Copyright &copy; Salads Hub 2019. Powered by HACTECH Network Admin Student.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const cartCount = document.getElementById("cart-count");
+                let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                if (cartCount) {
+                    cartCount.textContent = totalItems;
+                }
+            });
+        </script>
+    </body>
+</html>

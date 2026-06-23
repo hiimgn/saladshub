@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Salads Hub - Giỏ hàng của bạn" />
+        <meta name="author" content="Salads Hub" />
+        <title>Giỏ Hàng | Salads Hub</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+
+        <style>
+            body { background-color: #FAF6F0; color: #333333; font-family: system-ui, -apple-system, sans-serif; }
+            .text-brand-orange { color: #F27020 !important; }
+            .navbar-custom { background-color: #ffffff !important; border-bottom: 1px solid #eae5dd; }
+            
+            .btn-brand-orange { background-color: #F27020 !important; color: #ffffff !important; border: none; transition: all 0.2s; }
+            .btn-brand-orange:hover { background-color: #e05f11 !important; }
+
+            .cart-card { background-color: #ffffff !important; border: 1px solid #ebd9c5 !important; border-radius: 12px; }
+            
+            .form-control-custom { border: 1px solid #ebd9c5 !important; border-radius: 8px; padding: 10px 12px; background-color: #ffffff; font-size: 0.95rem; }
+            .form-control-custom:focus { border-color: #F27020 !important; box-shadow: 0 0 0 0.2rem rgba(242, 112, 32, 0.15) !important; outline: none; }
+
+            .btn-icon-only { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid #ebd9c5; background-color: #ffffff; color: #888888; transition: all 0.2s ease-in-out; }
+            .btn-icon-edit:hover { color: #F27020 !important; border-color: #F27020 !important; background-color: #fffaf5; }
+            .btn-icon-delete:hover { color: #dc3545 !important; border-color: #dc3545 !important; background-color: #fff5f5; }
+
+            .input-inline-notes { font-size: 0.85rem; border: 1px dashed #ebd9c5 !important; background-color: #fafaf8; border-radius: 6px; padding: 6px 10px; transition: all 0.2s; }
+            .input-inline-notes:focus { background-color: #ffffff; border-color: #F27020 !important; outline: none; }
+
+            .form-control-custom::placeholder, .input-inline-notes::placeholder { font-style: italic; color: #a09a95; opacity: 0.75; }
+
+            .modal-custom-content { border: 1px solid #ebd9c5 !important; border-radius: 16px; background-color: #ffffff; }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-custom sticky-top shadow-sm py-2">
+            <div class="container px-4 px-lg-5 d-flex align-items-center">
+                <a class="navbar-brand d-flex align-items-center fw-bold text-brand-orange mb-0" href="#" onclick="window.history.back(); return false;">
+                    <i class="bi bi-arrow-left me-2 text-dark" style="font-size: 1.3rem; -webkit-text-stroke: 0.5px;"></i>
+                    <span>Giỏ Hàng Của Bạn</span>
+                </a>
+            </div>
+        </nav>
+
+        <section class="py-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row">
+                    
+                    <div class="col-lg-7 mb-4">
+                        <h5 class="fw-bold mb-3 text-dark d-flex align-items-center">
+                            <i class="bi bi-receipt text-dark me-2"></i> Danh sách món ăn
+                        </h5>
+                        <div id="cart-container"></div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="p-3 cart-card shadow-sm">
+                            <h5 class="fw-bold mb-3 text-dark border-bottom border-light pb-2">Thông tin nhận hàng</h5>
+                            
+                            <form id="order-form">
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted mb-1">Họ và tên:</label>
+                                    <input type="text" class="form-control form-control-custom w-100" id="cust-name" placeholder="Nhập họ và tên người nhận..." required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted mb-1">Số điện thoại:</label>
+                                    <input type="tel" class="form-control form-control-custom w-100" id="cust-phone" placeholder="Nhập số điện thoại liên hệ..." required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted mb-1">Địa chỉ nhận hàng:</label>
+                                    <input type="text" class="form-control form-control-custom w-100" id="cust-address" placeholder="Số nhà, tên đường, khu chung cư..." required>
+                                </div>
+
+                                <div class="bg-light rounded p-3 my-3 border border-light">
+                                    <div class="d-flex justify-content-between align-items-center mb-1 small fw-semibold text-muted">
+                                        <span>Tiền hàng tạm tính:</span>
+                                        <span id="subtotal-price">0đ</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2 small fw-semibold text-muted">
+                                        <span>Phí giao hàng:</span>
+                                        <span class="text-success">Quán gọi báo sau</span>
+                                    </div>
+                                    <hr class="my-2 border-secondary" style="opacity: 0.15;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="fw-bold text-dark">Tổng cộng trả quán:</span>
+                                        <span id="total-price" class="text-brand-orange fw-bolder fs-4">0đ</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-brand-orange btn-lg py-2.5 fs-6 fw-bold shadow-sm" id="btn-submit-order">
+                                        <i class="bi bi-check-circle-fill me-2"></i>XÁC NHẬN ĐẶT HÀNG
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <div class="modal fade" id="confirmOrderModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content modal-custom-content">
+                    <div class="modal-header border-bottom-0 pb-0 justify-content-center mt-3">
+                        <i class="bi bi-shield-exclamation text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <div class="modal-body text-center pt-2">
+                        <h4 class="fw-bold mb-3">Xác nhận Số Điện Thoại</h4>
+                        <p class="mb-2 text-muted">Quán sẽ gọi điện cho bạn theo số này để báo phí ship và xác nhận đơn:</p>
+                        <h2 id="confirmPhoneDisplay" class="text-brand-orange fw-bold tracking-wide mb-3">09xx.xxx.xxx</h2>
+                        
+                        <div class="bg-light p-2 rounded-3 border">
+                            <p class="mb-0 text-dark small fw-semibold">Đơn hàng sẽ tự động gửi đi sau <strong id="countdownTimer" class="text-danger fs-5 mx-1">5</strong> giây...</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center border-top-0 pb-4">
+                        <button type="button" class="btn btn-light border px-4 fw-bold text-secondary" id="btnCancelOrder">Sửa lại SĐT</button>
+                        <button type="button" class="btn btn-brand-orange px-4 fw-bold" id="btnForceSend">Gửi Ngay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="orderSuccessModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
+                <div class="modal-content modal-custom-content shadow-lg text-center p-4">
+                    <div class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 3.5rem;"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-1">Đặt Hàng Thành Công!</h4>
+                    <p class="text-muted small mb-3">Mã đơn hàng: <strong class="text-dark" id="modal-order-id">SHxxxxxx</strong></p>
+                    
+                    <div class="p-3 bg-light rounded-3 mb-3 border border-success text-start small">
+                        <div class="d-flex align-items-center mb-1">
+                            <i class="bi bi-telephone-inbound-fill text-success fs-5 me-2"></i>
+                            <strong class="text-success">Vui lòng để ý điện thoại!</strong>
+                        </div>
+                        <p class="mb-0 text-muted mt-1" style="line-height: 1.5;">Nhân viên bếp sẽ gọi lại cho bạn theo số <strong class="text-dark" id="modal-customer-phone">0900.000.000</strong> trong <strong class="text-brand-orange">5 phút tới</strong> để xác nhận đơn.</p>
+                    </div>
+                    
+                    <div class="d-grid mt-2">
+                        <button type="button" class="btn btn-brand-orange py-2.5 fw-bold shadow-sm" id="btn-modal-close" style="border-radius: 8px;">
+                            Tuyệt vời, Về Trang Chủ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="py-4 bg-dark text-white-50 mt-5">
+            <div class="container px-4 px-lg-5 text-center small text-muted">
+                <p class="m-0">Copyright &copy; Salads Hub 2026. Powered by HACTECH Network Admin Student.</p>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const cartContainer = document.getElementById("cart-container");
+                const subtotalPrice = document.getElementById("subtotal-price");
+                const totalPrice = document.getElementById("total-price");
+                const orderForm = document.getElementById("order-form");
+                const submitBtn = document.getElementById("btn-submit-order");
+
+                let countdownInterval;
+                let currentCountdown = 5;
+
+                const O_KHOA = "U2FsYWRzSHViX1NlY3VyZV8yMDI2X/CfppU=";
+
+                function decodeFrontendToken(base64Str) {
+                    return decodeURIComponent(atob(base64Str).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+                }
+
+                function validateFlexiblePhone(phone) {
+                    const phoneRegex = /^[0-9+\s().-]{9,15}$/;
+                    const cleanPhone = phone.replace(/[^0-9]/g, '');
+                    if (phoneRegex.test(phone) && cleanPhone.length >= 9 && cleanPhone.length <= 13) {
+                        return true;
+                    }
+                    return false;
+                }
+
+                function formatCurrency(amount) {
+                    if (isNaN(amount)) return "0đ";
+                    return parseInt(amount).toLocaleString('vi-VN') + 'đ';
+                }
+
+                function renderCart() {
+                    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                    
+                    if (cart.length === 0) {
+                        cartContainer.innerHTML = `
+                            <div class="text-center py-5 p-4 cart-card bg-white shadow-sm">
+                                <i class="bi bi-cart-x text-muted mb-3" style="font-size: 3.5rem;"></i>
+                                <p class="text-muted fw-bold mb-3">Giỏ hàng của bạn đang trống</p>
+                                <a href="#" onclick="window.history.back(); return false;" class="btn btn-brand-orange px-4 fw-bold shadow-sm py-2" style="border-radius:8px;">
+                                    <i class="bi bi-arrow-left me-1"></i> Quay lại Chọn món
+                                </a>
+                            </div>
+                        `;
+                        subtotalPrice.textContent = "0đ";
+                        totalPrice.textContent = "0đ";
+                        submitBtn.disabled = true;
+                        return;
+                    }
+
+                    submitBtn.disabled = false;
+                    let htmlContent = "";
+                    let finalBillTotal = 0;
+
+                    cart.forEach((item, index) => {
+                        let pricePerUnit = item.comboUnitPrice || item.singlePrice || 0;
+                        let itemTotalCost = pricePerUnit * (item.quantity || 1);
+                        finalBillTotal += itemTotalCost;
+                        
+                        let proteinLabel = "Đạm kèm";
+                        let sauceLabel = "Nước sốt";
+                        if (item.category === "juice") {
+                            proteinLabel = "Vị nước ép";
+                            sauceLabel = "Tùy chọn đá";
+                        }
+
+                        let toppingsHtml = '<span class="text-muted small">Không thêm topping</span>';
+                        if (item.toppings && item.toppings.length > 0) {
+                            toppingsHtml = '<ul class="list-unstyled ps-1 mb-0 small text-dark fw-semibold">' +
+                                item.toppings.map(t => {
+                                    if (typeof t === 'object' && t !== null) {
+                                        return `<li class="d-flex align-items-center mb-0.5"><i class="bi bi-dot text-brand-orange fs-4 lh-1"></i> ${t.toppingName} (x${t.quantity || 1})</li>`;
+                                    }
+                                    return `<li class="d-flex align-items-center mb-0.5"><i class="bi bi-dot text-brand-orange fs-4 lh-1"></i> ${t}</li>`;
+                                }).join('') +
+                                '</ul>';
+                        }
+
+                        let toppingsBlockHtml = `
+                            <div class="mt-1 d-flex align-items-start">
+                                <i class="bi bi-plus-circle-fill text-muted me-1 mt-0.5" style="font-size: 0.8rem;"></i> 
+                                <div>Topping: ${toppingsHtml}</div>
+                            </div>
+                        `;
+
+                        if (item.category === "juice") {
+                            toppingsBlockHtml = "";
+                        }
+
+                        htmlContent += `
+                            <div class="p-3 cart-card bg-white shadow-sm mb-3 position-relative">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="pe-3 flex-grow-1">
+                                        <h6 class="fw-bold text-dark mb-1 fs-5">${item.name} <span class="text-brand-orange">x${item.quantity || 1}</span></h6>
+                                        <div class="small text-muted mb-2" style="line-height: 1.4;">
+                                            <i class="bi bi-caret-right-fill text-brand-orange"></i> ${proteinLabel}: <strong>${item.protein || 'Chưa chọn'}</strong><br>
+                                            <i class="bi bi-caret-right-fill text-brand-orange"></i> ${sauceLabel}: <strong>${item.sauce || 'Mặc định'}</strong><br>
+                                            
+                                            ${toppingsBlockHtml}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex gap-2">
+                                        <button class="btn-icon-only btn-icon-edit btn-edit-item" data-index="${index}" type="button" title="Sửa món">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </button>
+                                        <button class="btn-icon-only btn-icon-delete btn-delete-item" data-index="${index}" type="button" title="Xóa món">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="mt-2 pt-2 border-top border-light">
+                                    <label class="form-label small fw-bold text-muted mb-1" style="font-size: 0.8rem;">Ghi chú:</label>
+                                    <input type="text" class="form-control form-control-sm input-inline-notes w-100" 
+                                            data-index="${index}" value="${item.notes || ''}" placeholder="Thêm ghi chú nếu cần...">
+                                </div>
+
+                                <div class="text-end fw-bold text-brand-orange mt-2 fs-5">${formatCurrency(itemTotalCost)}</div>
+                            </div>
+                        `;
+                    });
+
+                    cartContainer.innerHTML = htmlContent;
+                    subtotalPrice.textContent = formatCurrency(finalBillTotal);
+                    totalPrice.textContent = formatCurrency(finalBillTotal);
+
+                    initDeleteEvents();
+                    initEditEvents();
+                    initInlineNotesEvents();
+                }
+
+                function initDeleteEvents() {
+                    document.querySelectorAll(".btn-delete-item").forEach(btn => {
+                        btn.addEventListener("click", function () {
+                            let itemIndex = parseInt(this.getAttribute("data-index"));
+                            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                            cart.splice(itemIndex, 1);
+                            localStorage.setItem("cart", JSON.stringify(cart));
+                            renderCart();
+                        });
+                    });
+                }
+
+                function initEditEvents() {
+                    document.querySelectorAll(".btn-edit-item").forEach(btn => {
+                        btn.addEventListener("click", function () {
+                            let itemIndex = this.getAttribute("data-index");
+                            localStorage.setItem("edit_target_index", itemIndex);
+
+                            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                            let item = cart[itemIndex];
+                            
+                            if (item) {
+                                if (item.category === "salad") {
+                                    window.location.href = "salad.html";
+                                } else if (item.category === "brown_rice") {
+                                    window.location.href = "brown-rice.html";
+                                } else if (item.category === "mixed_rice") { 
+                                    window.location.href = "mixed-rice.html";
+                                } else if (item.category === "juice") { 
+                                    window.location.href = "juice.html";
+                                } else {
+                                    window.location.href = "index.html"; 
+                                }
+                            }
+                        });
+                    });
+                }
+
+                function initInlineNotesEvents() {
+                    document.querySelectorAll(".input-inline-notes").forEach(input => {
+                        input.addEventListener("input", function () {
+                            let itemIndex = parseInt(this.getAttribute("data-index"));
+                            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                            if (cart[itemIndex]) {
+                                cart[itemIndex].notes = this.value.trim();
+                                localStorage.setItem("cart", JSON.stringify(cart));
+                            }
+                        });
+                    });
+                }
+
+                const confirmModal = new bootstrap.Modal(document.getElementById('confirmOrderModal'));
+                const successModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
+
+                orderForm.addEventListener("submit", function (e) {
+                    e.preventDefault();                    
+                    const phone = document.getElementById("cust-phone").value.trim();
+
+                    if (!validateFlexiblePhone(phone)) {
+                        alert("Số điện thoại không hợp lệ! Vui lòng kiểm tra lại (Hệ thống hỗ trợ cả số di động, số quốc tế và số máy bàn).");
+                        document.getElementById("cust-phone").focus();
+                        return;
+                    }
+
+                    document.getElementById("confirmPhoneDisplay").textContent = phone;
+                    currentCountdown = 5;
+                    document.getElementById("countdownTimer").textContent = currentCountdown;
+                    confirmModal.show();
+                    clearInterval(countdownInterval);
+                    countdownInterval = setInterval(() => {
+                        currentCountdown--;
+                        document.getElementById("countdownTimer").textContent = currentCountdown;
+                        if (currentCountdown <= 0) {
+                            clearInterval(countdownInterval);
+                            confirmModal.hide();
+                            executeFinalOrder();
+                        }
+                    }, 1000);
+                });
+
+                document.getElementById("btnCancelOrder").addEventListener("click", function() {
+                    clearInterval(countdownInterval);
+                    confirmModal.hide();
+                });
+
+                document.getElementById("btnForceSend").addEventListener("click", function() {
+                    clearInterval(countdownInterval);
+                    confirmModal.hide();
+                    executeFinalOrder();
+                });
+
+                function executeFinalOrder() {
+                    const name = document.getElementById("cust-name").value.trim();
+                    const phone = document.getElementById("cust-phone").value.trim();
+                    const address = document.getElementById("cust-address").value.trim();
+                    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+                    const now = new Date();
+                    const year = String(now.getFullYear()).slice(-2);
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const mins = String(now.getMinutes()).padStart(2, '0');
+                    const secs = String(now.getSeconds()).padStart(2, '0');
+                    
+                    const orderId = `SH${year}${month}${day}-${hours}${mins}${secs}`;
+
+                    const orderPayload = {
+                        secretToken: decodeFrontendToken(O_KHOA),
+                        orderId: orderId,
+                        customer: { name, phone, address },
+                        items: cart,
+                        orderTime: now.toLocaleString('vi-VN')
+                    };
+
+                    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxjWUABb5veqqCUYwjBr-IiMqgBYz2l2-X8M3SkhjxgAI4GWcWXmBUAu_s1UY-ykNLs4A/exec";
+
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>ĐANG GỬI ĐƠN HÀNG...';
+
+                    fetch(APPS_SCRIPT_URL, {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(orderPayload)
+                    })
+                    .then(() => {
+                        document.getElementById("modal-order-id").textContent = orderId;
+                        document.getElementById("modal-customer-phone").textContent = phone;
+                        successModal.show();
+                        document.getElementById('btn-modal-close').addEventListener('click', function() {
+                            localStorage.removeItem("cart");
+                            window.location.href = "index.html";
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Lỗi mạng:", error);
+                        alert("Đường truyền mạng trục trặc, vui lòng thử lại sau giây lát!");
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>XÁC NHẬN ĐẶT HÀNG';
+                    });
+                }
+
+                renderCart();
+            });
+        </script>
+    </body>
+</html>
