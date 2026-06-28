@@ -205,6 +205,24 @@
             </div>
         </div>
 
+        <div class="modal fade" id="closedShopModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center p-4" style="border-radius: 16px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                    <i class="bi bi-moon-stars-fill text-brand-orange mb-3" style="font-size: 3.5rem;"></i>
+                    <h4 class="fw-bold mb-2">Quán đang nghỉ ngơi!</h4>
+                    <p class="text-muted mb-3">Thời gian nhận đơn từ <strong>10:00 - 17:00</strong> hằng ngày.</p>
+                    
+                    <div class="bg-light p-3 rounded-3 border border-light mb-4">
+                        <p class="small text-dark mb-0 fw-semibold" style="line-height: 1.5;">Bạn cứ thoải mái dạo quanh xem trước thực đơn để lên đồ cho ngày mai nhé!</p>
+                    </div>
+
+                    <button type="button" id="btnCloseShopModal" class="btn btn-brand-orange w-100 fw-bold py-2.5 fs-6" style="border-radius: 8px;">
+                        Tuyệt, tôi muốn xem Menu (<span id="autoCloseCountdown">5</span>s)
+                    </button>
+                </div>
+            </div>
+        </div>
+        
         <footer class="py-5 bg-dark text-white-50">
             <div class="container px-4 px-lg-5">
                 <div class="row g-4 text-start">
@@ -259,27 +277,52 @@
                     const currentHour = new Date().getHours();
 
                     if (currentHour < 10 || currentHour >= 17) {
+                        const addToCartBtn = document.getElementById("add-to-cart-btn");
                         if (addToCartBtn) {
                             addToCartBtn.disabled = true;
-                            addToCartBtn.style.backgroundColor = "#6c757d";
+                            addToCartBtn.style.backgroundColor = "#6c757d"; 
                             addToCartBtn.style.borderColor = "#6c757d";
-                            addToCartBtn.style.opacity = "1";
+                            addToCartBtn.style.opacity = "1"; 
                             addToCartBtn.classList.remove("btn-brand-orange");
                             addToCartBtn.innerHTML = `<span class="mx-auto fw-bold text-white"><i class="bi bi-door-closed-fill me-2"></i>Quán đang nghỉ (Mở 10:00 - 17:00)</span>`;
                         }
 
-                        const toast = document.getElementById("brand-toast");
-                        if (toast) {
-                            toast.textContent = "Quán đã nghỉ. Hẹn bạn ngày mai nhé!";
-                            toast.style.borderLeftColor = "#dc3545";
-                            toast.classList.add("show");
-                            setTimeout(() => { toast.classList.remove("show"); }, 5000);
+                        if (!sessionStorage.getItem("hasSeenClosedModal")) {
+                            const modalElement = document.getElementById('closedShopModal');
+                            if (modalElement) {
+                                const closedModal = new bootstrap.Modal(modalElement);
+                                closedModal.show();
+                                
+                                sessionStorage.setItem("hasSeenClosedModal", "true");
+
+                                let countdown = 5;
+                                const countdownSpan = document.getElementById("autoCloseCountdown");
+                                const closeBtn = document.getElementById("btnCloseShopModal");
+
+                                const timer = setInterval(() => {
+                                    countdown--;
+                                    if (countdownSpan) countdownSpan.textContent = countdown;
+
+                                    if (countdown <= 0) {
+                                        clearInterval(timer);
+                                        closedModal.hide();
+                                    }
+                                }, 1000);
+
+                                if (closeBtn) {
+                                    closeBtn.addEventListener("click", function() {
+                                        clearInterval(timer);
+                                        closedModal.hide();
+                                    });
+                                }
+                            }
                         }
+                        
                         return false; 
                     }
                     return true; 
                 }
-
+                
                 checkOperatingHours();
 
                 function formatCurrency(amount) {
