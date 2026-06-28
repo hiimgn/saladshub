@@ -16,13 +16,11 @@
                 color: #333333;
                 font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             }
-            
-            /* Màu cam thương hiệu */
+
             .text-brand-orange {
                 color: #F27020 !important;
             }
 
-            /* Định dạng Navbar */
             .navbar-custom {
                 background-color: #ffffff !important;
                 border-bottom: 1px solid #eae5dd;
@@ -78,7 +76,6 @@
                 color: #333333;
             }
 
-            /* Thông báo Toast Popup */
             .custom-toast {
                 position: fixed;
                 top: 20px;
@@ -103,7 +100,6 @@
                 transform: translate(-50%, 0);
             }
 
-            /* Hiệu ứng nhịp đập cho thẻ HOT */
             @keyframes pulse {
                 0% { transform: scale(1); opacity: 1; }
                 50% { transform: scale(1.1); opacity: 0.8; }
@@ -116,7 +112,7 @@
         </style>
     </head>
     <body>
-        <!-- Khối Toast Thông báo giờ mở cửa -->
+
         <div id="brand-toast" class="custom-toast"></div>
 
         <nav class="navbar navbar-custom sticky-top shadow-sm py-2">
@@ -172,7 +168,7 @@
                                 - Bạn có thể thay đổi dòng chữ "Tặng 1 Nước Ép..." thành sự kiện bất kỳ.
                                 ======================================================================== 
                                 -->
-                                <div class="mt-2 pt-2 border-top border-warning border-opacity-25 d-none">
+                                <div class="mt-2 pt-2 border-top border-warning border-opacity-25">
                                     <span class="badge bg-danger me-1 pulse-animation">HOT</span> 
                                     <span class="small fw-bold text-dark">Tặng 1 Nước Ép mix tùy chọn nhân ngày Phụ nữ Việt Nam!</span>
                                 </div>
@@ -180,7 +176,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- KẾT THÚC BẢNG TIN KHUYẾN MÃI -->
 
                 <div class="row justify-content-center">
                     <div class="col-12 mb-4">
@@ -290,21 +285,16 @@
                     cartCount.textContent = totalItems;
                 }
 
-                // =====================================================================
-                // CHỐT CHẶN TRANG CHỦ: HIỆN THÔNG BÁO NHƯNG VẪN CHO XEM MENU
-                // =====================================================================
                 function checkOperatingHours() {
                     const currentHour = new Date().getHours();
-                    
-                    // Từ 00:00 đến 09:59 HOẶC từ 17:00 đến 23:59 -> Đóng cửa
+
                     if (currentHour < 10 || currentHour >= 17) {
-                        // Chỉ hiện thông báo từ trên xuống, KHÔNG khóa nút "Xem chi tiết"
                         const toast = document.getElementById("brand-toast");
                         if (toast) {
-                            toast.textContent = "Quán đang nghỉ (10:00 - 17:00). Bạn cứ thoải mái xem menu để chuẩn bị món cho ngày mai nhé!";
-                            toast.style.borderLeftColor = "#F27020"; // Giữ viền cam cho thân thiện, không dùng màu đỏ báo lỗi
+                            toast.textContent = "Quán nghỉ mất rồi bạn ơi ~~";
+                            toast.style.borderLeftColor = "#F27020";
                             toast.classList.add("show");
-                            setTimeout(() => { toast.classList.remove("show"); }, 6000); // Kéo dài lên 6s để khách thoải mái đọc
+                            setTimeout(() => { toast.classList.remove("show"); }, 6000);
                         }
                     }
                 }
