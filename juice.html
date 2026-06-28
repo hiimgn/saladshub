@@ -220,7 +220,7 @@
                         </p>
                         <p class="small mb-0">
                             <i class="bi bi-clock-fill me-2 text-brand-orange"></i>
-                            <strong>Giờ phục vụ:</strong> 09:00 - 18:00 (Hàng ngày)
+                            <strong>Giờ phục vụ:</strong> 10:00 - 17:00 (Hàng ngày)
                         </p>
                     </div>
                     <div class="col-md-6">
@@ -254,6 +254,32 @@
                 const btnIncrease = document.getElementById("btn-increase");
                 const addToCartBtn = document.getElementById("add-to-cart-btn");
                 const cartCount = document.getElementById("cart-count");
+
+                function checkOperatingHours() {
+                    const currentHour = new Date().getHours();
+
+                    if (currentHour < 10 || currentHour >= 17) {
+                        if (addToCartBtn) {
+                            addToCartBtn.disabled = true;
+                            addToCartBtn.style.backgroundColor = "#888888"; 
+                            addToCartBtn.style.borderColor = "#888888";
+                            addToCartBtn.classList.remove("btn-brand-orange");
+                            addToCartBtn.innerHTML = `<span class="mx-auto fw-bold"><i class="bi bi-door-closed-fill me-2"></i>Quán đang nghỉ (Mở 10:00 - 17:00)</span>`;
+                        }
+
+                        const toast = document.getElementById("brand-toast");
+                        if (toast) {
+                            toast.textContent = "Quán đã nghỉ. Thời gian nhận đơn: 10:00 - 17:00. Hẹn bạn ngày mai!";
+                            toast.style.borderLeftColor = "#dc3545";
+                            toast.classList.add("show");
+                            setTimeout(() => { toast.classList.remove("show"); }, 5000);
+                        }
+                        return false; 
+                    }
+                    return true; 
+                }
+
+                checkOperatingHours();
 
                 function formatCurrency(amount) {
                     return parseInt(amount).toLocaleString('vi-VN') + 'đ';
@@ -391,6 +417,11 @@
 
                 if (addToCartBtn) {
                     addToCartBtn.addEventListener("click", function () {
+
+                        if (!checkOperatingHours()) {
+                            return;
+                        }
+                        
                         try {
                             let checkedCount = document.querySelectorAll(".fruit-checkbox:checked").length;
 
