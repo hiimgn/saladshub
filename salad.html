@@ -337,7 +337,7 @@
                         </p>
                         <p class="small mb-0">
                             <i class="bi bi-clock-fill me-2 text-brand-orange"></i>
-                            <strong>Giờ phục vụ:</strong> 09:00 - 18:00 (Hàng ngày)
+                            <strong>Giờ phục vụ:</strong> 10:00 - 17:00 (Hàng ngày)
                         </p>
                     </div>
                     <div class="col-md-6">
@@ -349,7 +349,7 @@
                 </div>
                 <hr class="border-secondary my-4" />
                 <div class="text-center small text-muted">
-                    <p class="m-0">Copyright &copy; Salads Hub 2019. Powered by HACTECH Network Admin Student.</p>
+                    <p class="m-0">Copyright &copy; Salads Hub 2026. Powered by HACTECH Network Admin Student.</p>
                 </div>
             </div>
         </footer>
@@ -370,6 +370,32 @@
                 const addToCartBtn = document.getElementById("add-to-cart-btn");
                 const cartCount = document.getElementById("cart-count");
 
+                function checkOperatingHours() {
+                    const currentHour = new Date().getHours();
+
+                    if (currentHour < 10 || currentHour >= 17) {
+                        if (addToCartBtn) {
+                            addToCartBtn.disabled = true;
+                            addToCartBtn.style.backgroundColor = "#888888"; 
+                            addToCartBtn.style.borderColor = "#888888";
+                            addToCartBtn.classList.remove("btn-brand-orange");
+                            addToCartBtn.innerHTML = `<span class="mx-auto fw-bold"><i class="bi bi-door-closed-fill me-2"></i>Quán đang nghỉ (Mở 10:00 - 17:00)</span>`;
+                        }
+
+                        const toast = document.getElementById("brand-toast");
+                        if (toast) {
+                            toast.textContent = "Quán đã nghỉ. Thời gian nhận đơn: 10:00 - 17:00. Hẹn bạn ngày mai!";
+                            toast.style.borderLeftColor = "#dc3545";
+                            toast.classList.add("show");
+                            setTimeout(() => { toast.classList.remove("show"); }, 5000);
+                        }
+                        return false; 
+                    }
+                    return true; 
+                }
+
+                checkOperatingHours();
+                
                 function formatCurrency(amount) {
                     return parseInt(amount).toLocaleString('vi-VN') + 'đ';
                 }
@@ -392,7 +418,7 @@
                     let finalTotal = (basePrice + toppingsPrice) * mainQuantity;
                     
                     let formattedPrice = formatCurrency(finalTotal);
-                    priceDisplay.textContent = formattedPrice;
+                    if (priceDisplay) priceDisplay.textContent = formattedPrice;
                     if (priceDisplayTop) priceDisplayTop.textContent = formattedPrice;
                 }
 
@@ -493,7 +519,7 @@
                         let editItem = cart[editIndex];
                         
                         if (editItem) {
-                            let spanElement = addToCartBtn.querySelector('span');
+                            let spanElement = addToCartBtn.querySelector('span:first-child');
                             if (spanElement) {
                                 spanElement.innerHTML = '<i class="bi bi-save-fill me-2"></i>Cập nhật món';
                             }
@@ -541,6 +567,10 @@
 
                 if (addToCartBtn) {
                     addToCartBtn.addEventListener("click", function () {
+                        if (!checkOperatingHours()) {
+                            return;
+                        }
+                        
                         try {
                             const selectedOption = proteinSelect.options[proteinSelect.selectedIndex];
                             const checkedSauceRadio = document.querySelector('input[name="sauce-radio"]:checked');
@@ -597,6 +627,7 @@
                                 const toast = document.getElementById("brand-toast");
                                 if (toast) {
                                     toast.textContent = "Đã thêm vào giỏ hàng!";
+                                    toast.style.borderLeftColor = "#F27020";
                                     toast.classList.add("show");
                                     setTimeout(() => { toast.classList.remove("show"); }, 2000);
                                 }
