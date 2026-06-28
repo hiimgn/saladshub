@@ -38,7 +38,7 @@
     <body>
         <nav class="navbar navbar-custom sticky-top shadow-sm py-2">
             <div class="container px-4 px-lg-5 d-flex align-items-center">
-                <a class="navbar-brand d-flex align-items-center fw-bold text-brand-orange mb-0" href="#" onclick="window.history.back(); return false;">
+                <a class="navbar-brand d-flex align-items-center fw-bold text-brand-orange mb-0" href="#" onclick="window.location.href='index.html'; return false;">
                     <i class="bi bi-arrow-left me-2 text-dark" style="font-size: 1.3rem; -webkit-text-stroke: 0.5px;"></i>
                     <span>Giỏ Hàng Của Bạn</span>
                 </a>
@@ -79,13 +79,21 @@
                                         <span>Tiền hàng tạm tính:</span>
                                         <span id="subtotal-price">0đ</span>
                                     </div>
+                                    
+                                    <div id="discount-row" class="d-flex justify-content-between align-items-center mb-1 small fw-bold text-success d-none">
+                                        <span>Khuyến mãi (<span id="discount-percent">0%</span>):</span>
+                                        <span>- <span id="discount-amount">0đ</span></span>
+                                    </div>
+                                    <div id="discount-hint" class="small text-danger fst-italic mb-1 d-none" style="font-size: 0.85rem;">
+                                        </div>
+
                                     <div class="d-flex justify-content-between align-items-center mb-2 small fw-semibold text-muted">
                                         <span>Phí giao hàng:</span>
                                         <span class="text-success">Quán gọi báo sau</span>
                                     </div>
                                     <hr class="my-2 border-secondary" style="opacity: 0.15;">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <span class="fw-bold text-dark">Tổng cộng trả quán:</span>
+                                        <span class="fw-bold text-dark">Tổng cộng:</span>
                                         <span id="total-price" class="text-brand-orange fw-bolder fs-4">0đ</span>
                                     </div>
                                 </div>
@@ -152,6 +160,22 @@
             </div>
         </div>
 
+        <div class="modal fade" id="closedShopModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center p-4" style="border-radius: 16px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                    <i class="bi bi-moon-stars-fill text-brand-orange mb-3" style="font-size: 3.5rem;"></i>
+                    <h4 class="fw-bold mb-2">Quán đang nghỉ ngơi!</h4>
+                    <p class="text-muted mb-3">Thời gian nhận đơn từ <strong>10:00 - 17:00</strong> hằng ngày.</p>
+                    <div class="bg-light p-3 rounded-3 border border-light mb-4">
+                        <p class="small text-dark mb-0 fw-semibold" style="line-height: 1.5;">Bạn cứ thoải mái dạo quanh xem trước thực đơn để lên đồ cho ngày mai nhé!</p>
+                    </div>
+                    <button type="button" id="btnCloseShopModal" class="btn btn-brand-orange w-100 fw-bold py-2.5 fs-6" style="border-radius: 8px;">
+                        Tuyệt, tôi muốn xem Menu (<span id="autoCloseCountdown">5</span>s)
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <footer class="py-4 bg-dark text-white-50 mt-5">
             <div class="container px-4 px-lg-5 text-center small text-muted">
                 <p class="m-0">Copyright &copy; Salads Hub 2026. Powered by HACTECH Network Admin Student.</p>
@@ -170,7 +194,6 @@
 
                 let countdownInterval;
                 let currentCountdown = 5;
-
                 const O_KHOA = "U2FsYWRzSHViX1NlY3VyZV8yMDI2X/CfppU=";
 
                 function decodeFrontendToken(base64Str) {
@@ -182,16 +205,60 @@
                 function validateFlexiblePhone(phone) {
                     const phoneRegex = /^[0-9+\s().-]{9,15}$/;
                     const cleanPhone = phone.replace(/[^0-9]/g, '');
-                    if (phoneRegex.test(phone) && cleanPhone.length >= 9 && cleanPhone.length <= 13) {
-                        return true;
-                    }
-                    return false;
+                    return (phoneRegex.test(phone) && cleanPhone.length >= 9 && cleanPhone.length <= 13);
                 }
 
                 function formatCurrency(amount) {
                     if (isNaN(amount)) return "0đ";
                     return parseInt(amount).toLocaleString('vi-VN') + 'đ';
                 }
+
+                function checkOperatingHours(isSilent = false) {
+                    const currentHour = new Date().getHours();
+                    if (currentHour < 10 || currentHour >= 17) {
+                        if (submitBtn) {
+                            submitBtn.disabled = true;
+                            submitBtn.style.backgroundColor = "#6c757d"; 
+                            submitBtn.style.borderColor = "#6c757d";
+                            submitBtn.style.opacity = "1"; 
+                            submitBtn.classList.remove("btn-brand-orange");
+                            submitBtn.innerHTML = `<i class="bi bi-door-closed-fill me-2"></i>QUÁN ĐANG NGHỈ (10:00 - 17:00)`;
+                        }
+
+                        if (!isSilent && !sessionStorage.getItem("hasSeenClosedModal")) {
+                            const modalElement = document.getElementById('closedShopModal');
+                            if (modalElement) {
+                                const closedModal = new bootstrap.Modal(modalElement);
+                                closedModal.show();
+                                sessionStorage.setItem("hasSeenClosedModal", "true");
+
+                                let countdown = 5;
+                                const countdownSpan = document.getElementById("autoCloseCountdown");
+                                const closeBtn = document.getElementById("btnCloseShopModal");
+
+                                const timer = setInterval(() => {
+                                    countdown--;
+                                    if (countdownSpan) countdownSpan.textContent = countdown;
+                                    if (countdown <= 0) {
+                                        clearInterval(timer);
+                                        closedModal.hide();
+                                    }
+                                }, 1000);
+
+                                if (closeBtn) {
+                                    closeBtn.addEventListener("click", function() {
+                                        clearInterval(timer);
+                                        closedModal.hide();
+                                    });
+                                }
+                            }
+                        }
+                        return false; 
+                    }
+                    return true; 
+                }
+
+                checkOperatingHours();
 
                 function renderCart() {
                     let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -201,7 +268,7 @@
                             <div class="text-center py-5 p-4 cart-card bg-white shadow-sm">
                                 <i class="bi bi-cart-x text-muted mb-3" style="font-size: 3.5rem;"></i>
                                 <p class="text-muted fw-bold mb-3">Giỏ hàng của bạn đang trống</p>
-                                <a href="#" onclick="window.history.back(); return false;" class="btn btn-brand-orange px-4 fw-bold shadow-sm py-2" style="border-radius:8px;">
+                                <a href="#" onclick="window.location.href='index.html'; return false;" class="btn btn-brand-orange px-4 fw-bold shadow-sm py-2" style="border-radius:8px;">
                                     <i class="bi bi-arrow-left me-1"></i> Quay lại Chọn món
                                 </a>
                             </div>
@@ -209,10 +276,15 @@
                         subtotalPrice.textContent = "0đ";
                         totalPrice.textContent = "0đ";
                         submitBtn.disabled = true;
+                        document.getElementById("discount-row").classList.add("d-none");
+                        document.getElementById("discount-hint").classList.add("d-none");
                         return;
                     }
 
-                    submitBtn.disabled = false;
+                    if (checkOperatingHours(true)) {
+                        submitBtn.disabled = false;
+                    }
+
                     let htmlContent = "";
                     let finalBillTotal = 0;
 
@@ -246,10 +318,7 @@
                                 <div>Topping: ${toppingsHtml}</div>
                             </div>
                         `;
-
-                        if (item.category === "juice") {
-                            toppingsBlockHtml = "";
-                        }
+                        if (item.category === "juice") toppingsBlockHtml = "";
 
                         htmlContent += `
                             <div class="p-3 cart-card bg-white shadow-sm mb-3 position-relative">
@@ -259,35 +328,71 @@
                                         <div class="small text-muted mb-2" style="line-height: 1.4;">
                                             <i class="bi bi-caret-right-fill text-brand-orange"></i> ${proteinLabel}: <strong>${item.protein || 'Chưa chọn'}</strong><br>
                                             <i class="bi bi-caret-right-fill text-brand-orange"></i> ${sauceLabel}: <strong>${item.sauce || 'Mặc định'}</strong><br>
-                                            
                                             ${toppingsBlockHtml}
                                         </div>
                                     </div>
-                                    
                                     <div class="d-flex gap-2">
-                                        <button class="btn-icon-only btn-icon-edit btn-edit-item" data-index="${index}" type="button" title="Sửa món">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </button>
-                                        <button class="btn-icon-only btn-icon-delete btn-delete-item" data-index="${index}" type="button" title="Xóa món">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
+                                        <button class="btn-icon-only btn-icon-edit btn-edit-item" data-index="${index}" type="button" title="Sửa món"><i class="bi bi-pencil-fill"></i></button>
+                                        <button class="btn-icon-only btn-icon-delete btn-delete-item" data-index="${index}" type="button" title="Xóa món"><i class="bi bi-trash-fill"></i></button>
                                     </div>
                                 </div>
-
                                 <div class="mt-2 pt-2 border-top border-light">
                                     <label class="form-label small fw-bold text-muted mb-1" style="font-size: 0.8rem;">Ghi chú:</label>
                                     <input type="text" class="form-control form-control-sm input-inline-notes w-100" 
                                             data-index="${index}" value="${item.notes || ''}" placeholder="Thêm ghi chú nếu cần...">
                                 </div>
-
                                 <div class="text-end fw-bold text-brand-orange mt-2 fs-5">${formatCurrency(itemTotalCost)}</div>
                             </div>
                         `;
                     });
 
                     cartContainer.innerHTML = htmlContent;
+
+                    let discountRate = 0;
+                    let discountAmount = 0;
+                    let hintMessage = "";
+
+                    if (finalBillTotal >= 300000) {
+                        discountRate = 0.10;
+                        discountAmount = finalBillTotal * discountRate;
+
+                    } else if (finalBillTotal >= 200000) {
+                        discountRate = 0.05;
+                        discountAmount = finalBillTotal * discountRate;
+                        let amountNeeded = 300000 - finalBillTotal;
+
+                        hintMessage = `* Đang giảm 5%. Mua thêm <strong>${formatCurrency(amountNeeded)}</strong> để nâng mức giảm lên <strong>10%</strong>!`;
+                    } else if (finalBillTotal > 0) {
+                        let amountNeeded = 200000 - finalBillTotal;
+
+                        hintMessage = `* Mua thêm <strong>${formatCurrency(amountNeeded)}</strong> nữa để được giảm <strong>5%</strong>!`;
+                    }
+
+                    let finalPay = finalBillTotal - discountAmount;
+
                     subtotalPrice.textContent = formatCurrency(finalBillTotal);
-                    totalPrice.textContent = formatCurrency(finalBillTotal);
+                    totalPrice.textContent = formatCurrency(finalPay);
+                    
+                    const discountRow = document.getElementById("discount-row");
+                    const discountHint = document.getElementById("discount-hint");
+
+                    if (discountAmount > 0) {
+                        discountRow.classList.remove("d-none");
+                        document.getElementById("discount-percent").textContent = (discountRate * 100) + "%";
+                        document.getElementById("discount-amount").textContent = formatCurrency(discountAmount);
+                    } else {
+                        discountRow.classList.add("d-none");
+                    }
+
+                    if (hintMessage !== "") {
+                        discountHint.classList.remove("d-none");
+                        discountHint.innerHTML = hintMessage; 
+                    } else {
+                        discountHint.classList.add("d-none");
+                    }
+
+                    orderForm.dataset.discountAmount = discountAmount;
+                    orderForm.dataset.finalPay = finalPay;
 
                     initDeleteEvents();
                     initEditEvents();
@@ -349,11 +454,16 @@
                 const successModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
 
                 orderForm.addEventListener("submit", function (e) {
-                    e.preventDefault();                    
-                    const phone = document.getElementById("cust-phone").value.trim();
+                    e.preventDefault();     
+        
+                    if (!checkOperatingHours(true)) {
+                        return; 
+                    }
 
+                    const phone = document.getElementById("cust-phone").value.trim();
+                    
                     if (!validateFlexiblePhone(phone)) {
-                        alert("Số điện thoại không hợp lệ! Vui lòng kiểm tra lại (Hệ thống hỗ trợ cả số di động, số quốc tế và số máy bàn).");
+                        alert("Số điện thoại không hợp lệ! Vui lòng kiểm tra lại.");
                         document.getElementById("cust-phone").focus();
                         return;
                     }
@@ -401,12 +511,17 @@
                     
                     const orderId = `SH${year}${month}${day}-${hours}${mins}${secs}`;
 
+                    const discountAmount = parseInt(orderForm.dataset.discountAmount) || 0;
+                    const finalPay = parseInt(orderForm.dataset.finalPay) || 0;
+
                     const orderPayload = {
                         secretToken: decodeFrontendToken(O_KHOA),
                         orderId: orderId,
                         customer: { name, phone, address },
                         items: cart,
-                        orderTime: now.toLocaleString('vi-VN')
+                        orderTime: now.toLocaleString('vi-VN'),
+                        discountAmount: discountAmount,
+                        finalPay: finalPay
                     };
 
                     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxjWUABb5veqqCUYwjBr-IiMqgBYz2l2-X8M3SkhjxgAI4GWcWXmBUAu_s1UY-ykNLs4A/exec";
